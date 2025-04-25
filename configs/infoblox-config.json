@@ -1,0 +1,204 @@
+{
+  "general": {
+    "log_level": "info",
+    "data_dir": "./data",
+    "batch_size": 100,
+    "max_concurrent_requests": 10,
+    "retention_days": 90
+  },
+  "scrapers": {
+    "twitter": {
+      "enabled": true,
+      "api_key": "${TWITTER_API_KEY}",
+      "api_secret": "${TWITTER_API_SECRET}",
+      "access_token": "${TWITTER_ACCESS_TOKEN}",
+      "access_secret": "${TWITTER_ACCESS_SECRET}",
+      "keywords": [
+        "infoblox", "bloxone", "nios", "ddi solution", 
+        "dns security", "ipam", "dhcp", "dns management",
+        "network automation", "netmri", "threat defense",
+        "dns firewall", "grid technology", "network visibility"
+      ],
+      "exclude_words": [
+        "spam", "ad", "advertisement", "giveaway", "promo"
+      ],
+      "max_results": 100
+    },
+    "app_store": {
+      "enabled": false,
+      "app_id": "com.infoblox.bloxone",
+      "country_codes": ["us", "gb", "ca", "au", "in"],
+      "max_reviews": 200
+    },
+    "google_play": {
+      "enabled": false,
+      "app_id": "com.infoblox.bloxone",
+      "country_codes": ["us", "gb", "ca", "au", "in"],
+      "max_reviews": 200
+    },
+    "trustpilot": {
+      "enabled": true,
+      "business_id": "infoblox",
+      "max_pages": 5
+    },
+    "g2": {
+      "enabled": true,
+      "product_id": "infoblox-ddi",
+      "max_pages": 5
+    }
+  },
+  "analyzer": {
+    "mode": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "negative_threshold": -0.3,
+    "relevance_threshold": 0.6,
+    "keywords": [
+      "bug", "crash", "error", "slow", "feature", "missing", 
+      "security", "vulnerability", "breach", "price", "expensive",
+      "support", "service", "interface", "dns", "dhcp", "ipam", "ddi",
+      "cloud", "automation", "deployment", "integration", "api",
+      "nios", "bloxone", "threat defense", "netmri", "grid"
+    ]
+  },
+  "router": {
+    "mappings": [
+      {"category": "product_issue", "department": "engineering", "priority": 10},
+      {"category": "dns_problem", "department": "engineering", "priority": 9},
+      {"category": "dhcp_problem", "department": "engineering", "priority": 9},
+      {"category": "ipam_problem", "department": "engineering", "priority": 9},
+      {"category": "performance", "department": "engineering", "priority": 8},
+      {"category": "security", "department": "security", "priority": 10},
+      {"category": "feature_request", "department": "product", "priority": 7},
+      {"category": "ui_ux", "department": "design", "priority": 7},
+      {"category": "billing_licensing", "department": "finance", "priority": 9},
+      {"category": "documentation", "department": "documentation", "priority": 6},
+      {"category": "deployment", "department": "professional_services", "priority": 8},
+      {"category": "cloud_integration", "department": "cloud_team", "priority": 8},
+      {"category": "automation", "department": "automation_team", "priority": 8},
+      {"category": "upgrade_issue", "department": "support", "priority": 9},
+      {"category": "general_complaint", "department": "support", "priority": 6}
+    ],
+    "departments": {
+      "engineering": {
+        "id": "engineering",
+        "name": "Engineering",
+        "email": "engineering@infoblox.com",
+        "slack_channel": "#engineering-reviews",
+        "jira_project": "ENG"
+      },
+      "product": {
+        "id": "product",
+        "name": "Product Management",
+        "email": "product@infoblox.com",
+        "slack_channel": "#product-reviews",
+        "jira_project": "PROD"
+      },
+      "security": {
+        "id": "security",
+        "name": "Security Team",
+        "email": "security@infoblox.com", 
+        "slack_channel": "#security-reviews",
+        "jira_project": "SEC"
+      },
+      "design": {
+        "id": "design",
+        "name": "UI/UX Design",
+        "email": "design@infoblox.com",
+        "slack_channel": "#design-reviews",
+        "jira_project": "UX"
+      },
+      "finance": {
+        "id": "finance", 
+        "name": "Finance & Billing",
+        "email": "finance@infoblox.com",
+        "slack_channel": "#finance-reviews",
+        "jira_project": "FIN"
+      },
+      "documentation": {
+        "id": "documentation",
+        "name": "Documentation Team",
+        "email": "docs@infoblox.com",
+        "slack_channel": "#docs-reviews",
+        "jira_project": "DOC"
+      },
+      "support": {
+        "id": "support",
+        "name": "Customer Support",
+        "email": "support@infoblox.com",
+        "slack_channel": "#support-reviews",
+        "jira_project": "SUP"
+      },
+      "professional_services": {
+        "id": "professional_services",
+        "name": "Professional Services",
+        "email": "services@infoblox.com",
+        "slack_channel": "#ps-reviews",
+        "jira_project": "PS"
+      },
+      "cloud_team": {
+        "id": "cloud_team",
+        "name": "Cloud Services Team",
+        "email": "cloud@infoblox.com",
+        "slack_channel": "#cloud-reviews",
+        "jira_project": "CLOUD"
+      },
+      "automation_team": {
+        "id": "automation_team",
+        "name": "Network Automation Team",
+        "email": "automation@infoblox.com",
+        "slack_channel": "#automation-reviews",
+        "jira_project": "AUTO"
+      }
+    }
+  },
+  "notifier": {
+    "email": {
+      "enabled": true,
+      "smtp_host": "smtp.infoblox.com",
+      "smtp_port": 587,
+      "smtp_user": "${SMTP_USER}",
+      "smtp_password": "${SMTP_PASSWORD}",
+      "from_address": "reviews@infoblox.com",
+      "subject_template": "[Review Alert] New negative review for {{.Product}}"
+    },
+    "slack": {
+      "enabled": true,
+      "webhook_url": "${SLACK_WEBHOOK_URL}",
+      "username": "Review Bot",
+      "icon_emoji": ":mag:"
+    },
+    "jira": {
+      "enabled": true,
+      "url": "https://infoblox.atlassian.net",
+      "username": "${JIRA_USERNAME}",
+      "api_token": "${JIRA_API_TOKEN}",
+      "issue_type": "Review",
+      "priority_map": {
+        "10": "Highest",
+        "9": "High",
+        "8": "Medium",
+        "7": "Low",
+        "6": "Lowest"
+      }
+    }
+  },
+  "api": {
+    "enabled": true,
+    "port": 8080,
+    "cors_allowed_origins": ["https://infoblox.com", "https://internal.infoblox.com"],
+    "auth": {
+      "enabled": true,
+      "tokens": ["${API_TOKEN}"]
+    }
+  },
+  "proxy": {
+    "enabled": false,
+    "url": "",
+    "username": "",
+    "password": ""
+  },
+  "rate_limit": {
+    "pause_between_requests": true,
+    "pause_duration": 500
+  }
+}

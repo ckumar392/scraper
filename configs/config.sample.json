@@ -1,0 +1,178 @@
+{
+  "scrapingInterval": "1h",
+  "scrapers": {
+    "twitter": {
+      "enabled": true,
+      "apiKey": "YOUR_TWITTER_API_KEY",
+      "apiSecret": "YOUR_TWITTER_API_SECRET",
+      "accessToken": "YOUR_TWITTER_ACCESS_TOKEN",
+      "accessSecret": "YOUR_TWITTER_ACCESS_SECRET",
+      "keywords": [
+        "Infoblox", "NIOS", "BloxOne", "DDI", "DNS security", "DHCP", "IPAM",
+        "@Infoblox", "#Infoblox", "BloxOne Threat Defense", "BloxOne DDI",
+        "NetMRI", "Grid Manager", "DNS Firewall", "Advanced DNS Protection"
+      ],
+      "excludeWords": ["competitor", "unrelated"],
+      "maxResults": 100
+    },
+    "reddit": {
+      "enabled": true,
+      "clientId": "YOUR_REDDIT_CLIENT_ID",
+      "clientSecret": "YOUR_REDDIT_CLIENT_SECRET",
+      "username": "YOUR_REDDIT_USERNAME",
+      "password": "YOUR_REDDIT_PASSWORD",
+      "subreddits": [
+        "networking", "netsec", "sysadmin", "cybersecurity", 
+        "cloudcomputing", "devops", "dns", "ipv6"
+      ],
+      "keywords": [
+        "Infoblox", "NIOS", "BloxOne", "DDI", "DNS security", 
+        "DHCP", "IPAM", "NetMRI", "DNS Firewall"
+      ],
+      "timeFrame": "week"
+    },
+    "appStore": {
+      "enabled": false,
+      "appIds": ["id1365045547", "id1337541943"],
+      "countries": ["us", "gb", "ca", "au", "de", "fr", "jp"],
+      "maxPages": 10
+    },
+    "googlePlay": {
+      "enabled": false,
+      "appIds": ["com.infoblox.ibmio", "com.infoblox.dnsone"],
+      "countries": ["us", "gb", "ca", "au", "de", "fr", "jp"],
+      "maxPages": 10
+    },
+    "customSites": [
+      {
+        "enabled": true,
+        "name": "Gartner Peer Insights",
+        "url": "https://www.gartner.com/reviews/market/ddi/vendor/infoblox",
+        "reviewUrls": ["https://www.gartner.com/reviews/market/ddi/vendor/infoblox?page={page}"],
+        "reviewXPaths": ["//div[@class='review-item']"],
+        "dateXPath": ".//div[@class='date']",
+        "authorXPath": ".//div[@class='reviewer-info']//div[@class='name']",
+        "ratingXPath": ".//div[@class='review-rating']/@data-rating"
+      },
+      {
+        "enabled": true,
+        "name": "TrustRadius",
+        "url": "https://www.trustradius.com/products/infoblox/reviews",
+        "reviewUrls": ["https://www.trustradius.com/products/infoblox/reviews?page={page}"],
+        "reviewXPaths": ["//div[@class='review-card']"],
+        "dateXPath": ".//time",
+        "authorXPath": ".//div[@class='reviewer-info']//span[@class='reviewer-name']",
+        "ratingXPath": ".//div[@class='review-rating']/@data-score"
+      }
+    ],
+    "rateLimits": {
+      "requestsPerMinute": 20,
+      "pauseAfterRequests": 50,
+      "pauseDuration": "30s",
+      "randomizeUserAgents": true,
+      "randomizePauseTimes": true
+    },
+    "proxySettings": {
+      "enabled": false,
+      "urls": ["http://proxyuser:password@proxy1.example.com:8080"],
+      "rotate": true
+    }
+  },
+  "analyzer": {
+    "mode": "local",
+    "modelEndpoint": "",
+    "apiKey": "",
+    "negativeThreshold": -0.3,
+    "relevanceThreshold": 0.5,
+    "keywords": [
+      "Infoblox", "NIOS", "BloxOne", "DDI", "DNS", "DHCP", "IPAM",
+      "NetMRI", "Grid", "Threat Defense", "DNS Firewall", "Advanced DNS Protection",
+      "outage", "downtime", "slow", "error", "bug", "crash", "problem",
+      "broken", "failed", "wrong", "incorrect", "help", "support",
+      "configuration", "setup", "deployment", "integration", "migration",
+      "pricing", "license", "subscription", "technical support",
+      "documentation", "guide", "tutorial", "update", "upgrade",
+      "performance", "security", "vulnerability", "compliance",
+      "cloud", "on-premise", "hybrid", "API", "automation"
+    ],
+    "intentCategories": [
+      "product_issue", "technical_support", "deployment", "performance", 
+      "feature_request", "billing_licensing", "documentation", "security", 
+      "cloud_integration", "automation", "upgrade_issue", "general_complaint"
+    ]
+  },
+  "router": {
+    "mappings": [
+      {"category": "product_issue", "department": "engineering", "priority": 10},
+      {"category": "technical_support", "department": "support", "priority": 10},
+      {"category": "deployment", "department": "solutions_engineering", "priority": 8},
+      {"category": "performance", "department": "engineering", "priority": 9},
+      {"category": "feature_request", "department": "product", "priority": 6},
+      {"category": "billing_licensing", "department": "finance", "priority": 8},
+      {"category": "documentation", "department": "documentation", "priority": 5},
+      {"category": "security", "department": "security", "priority": 10},
+      {"category": "cloud_integration", "department": "cloud_ops", "priority": 8},
+      {"category": "automation", "department": "engineering", "priority": 7},
+      {"category": "upgrade_issue", "department": "support", "priority": 9},
+      {"category": "general_complaint", "department": "customer_success", "priority": 6}
+    ],
+    "defaultDepartment": "customer_success"
+  },
+  "notifier": {
+    "email": {
+      "enabled": false,
+      "smtpServer": "smtp.infoblox.com",
+      "smtpPort": 587,
+      "username": "notifications@infoblox.com",
+      "password": "YOUR_EMAIL_PASSWORD",
+      "fromAddress": "feedback-alerts@infoblox.com",
+      "departmentAddresses": {
+        "engineering": "engineering@infoblox.com",
+        "security": "security@infoblox.com",
+        "product": "product@infoblox.com",
+        "support": "support@infoblox.com",
+        "solutions_engineering": "solutions@infoblox.com",
+        "cloud_ops": "cloudops@infoblox.com",
+        "documentation": "documentation@infoblox.com",
+        "finance": "finance@infoblox.com",
+        "customer_success": "customersuccess@infoblox.com"
+      }
+    },
+    "slack": {
+      "enabled": false,
+      "webhookUrl": "https://hooks.slack.com/services/YOUR_SLACK_WEBHOOK",
+      "departmentChannels": {
+        "engineering": "https://hooks.slack.com/services/YOUR_ENGINEERING_WEBHOOK",
+        "security": "https://hooks.slack.com/services/YOUR_SECURITY_WEBHOOK",
+        "product": "https://hooks.slack.com/services/YOUR_PRODUCT_WEBHOOK",
+        "support": "https://hooks.slack.com/services/YOUR_SUPPORT_WEBHOOK",
+        "solutions_engineering": "https://hooks.slack.com/services/YOUR_SOLUTIONS_WEBHOOK",
+        "cloud_ops": "https://hooks.slack.com/services/YOUR_CLOUD_OPS_WEBHOOK",
+        "documentation": "https://hooks.slack.com/services/YOUR_DOCUMENTATION_WEBHOOK",
+        "finance": "https://hooks.slack.com/services/YOUR_FINANCE_WEBHOOK",
+        "customer_success": "https://hooks.slack.com/services/YOUR_CUSTOMER_SUCCESS_WEBHOOK"
+      }
+    },
+    "dashboard": {
+      "enabled": true,
+      "updateInterval": "1m",
+      "port": 3000
+    },
+    "databases": {
+      "enabled": false,
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "reviewscraper",
+      "password": "YOUR_DB_PASSWORD",
+      "dbName": "infoblox_reviews"
+    }
+  },
+  "api": {
+    "port": 8080,
+    "enableSwagger": true,
+    "authToken": "YOUR_API_AUTH_TOKEN",
+    "rateLimit": 100,
+    "rateLimitWindow": "1m"
+  }
+}
