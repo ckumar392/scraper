@@ -103,3 +103,6 @@ type APIResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 	Error   string      `json:"error,omitempty"`
 }
+
+
+// --> scrape ==> classify(models) for --> notify(specifi), create tickets
