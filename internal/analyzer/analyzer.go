@@ -382,23 +382,26 @@ func countOccurrences(text, word string) int {
 	return len(strings.Split(text, word)) - 1
 }
 
-// OpenAI request and response types
+// OpenAIRequest represents the structure of a request to the OpenAI API
 type OpenAIRequest struct {
 	Model     string    `json:"model"`
 	Messages  []Message `json:"messages"`
 	MaxTokens int       `json:"max_tokens,omitempty"`
 }
 
+// Message represents a single message in the OpenAI chat completion API
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
 
+// OpenAIResponse represents the structure of a response from the OpenAI API
 type OpenAIResponse struct {
 	ID      string   `json:"id"`
 	Choices []Choice `json:"choices"`
 }
 
+// Choice represents a single completion choice returned by the OpenAI API
 type Choice struct {
 	Message      Message `json:"message"`
 	FinishReason string  `json:"finish_reason"`

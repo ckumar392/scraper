@@ -404,7 +404,7 @@ func (s *Server) handleGetScrapingStats(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
-// handleAnalyzeText analyzes custom text
+// AnalyzeRequest represents the input data for text analysis
 type AnalyzeRequest struct {
 	Text   string `json:"text"`
 	Source string `json:"source"`

@@ -34,6 +34,9 @@ type ScrapersConfig struct {
 	ProxySettings ProxyConfig               `json:"proxySettings"`
 }
 
+// TwitterConfig is an alias for TwitterScraperConfig for backward compatibility
+type TwitterConfig TwitterScraperConfig
+
 // TwitterScraperConfig contains Twitter-specific scraper settings
 type TwitterScraperConfig struct {
 	Enabled      bool     `json:"enabled"`

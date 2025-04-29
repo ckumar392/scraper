@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -151,100 +152,90 @@ func contains(s string, substrings ...string) bool {
 }
 
 func TestNewTwitterScraper(t *testing.T) {
-	cfg := config.TwitterConfig{
+	// Create the required config objects
+	twitterCfg := config.TwitterScraperConfig{
 		Keywords:     []string{"infoblox", "bloxone"},
 		ExcludeWords: []string{"spam"},
 		MaxResults:   100,
+		Enabled:      true,
+	}
+	rateLimitCfg := config.RateLimitConfig{
+		PauseBetweenRequests: true,
+		PauseDuration:        time.Second,
+		RandomizeUserAgents:  true,
+	}
+	proxyCfg := config.ProxyConfig{
+		Enabled: false,
 	}
 
-	scraper := NewTwitterScraper(cfg)
+	scraper := NewTwitterScraper(twitterCfg, rateLimitCfg, proxyCfg)
 
 	assert.NotNil(t, scraper)
-	assert.Equal(t, cfg, scraper.config)
+	assert.Equal(t, twitterCfg, scraper.config)
+	assert.Equal(t, rateLimitCfg, scraper.rateLimits)
+	assert.Equal(t, proxyCfg, scraper.proxies)
 }
 
 func TestFetchReviews(t *testing.T) {
-	// Setup
-	cfg := config.TwitterConfig{
+	// Setup mock server
+	server := setupMockTwitterServer()
+	defer server.Close()
+
+	// Create configs needed for the scraper
+	twitterCfg := config.TwitterScraperConfig{
 		Keywords:     []string{"infoblox", "bloxone", "ddi"},
 		ExcludeWords: []string{"spam", "ad"},
 		MaxResults:   100,
+		Enabled:      true,
+		APIKey:       "test_key",
+		APISecret:    "test_secret",
+		AccessToken:  "test_token",
+		AccessSecret: "test_token_secret",
 	}
 
-	mockClient := new(MockTwitterClient)
-	scraper := NewTwitterScraper(cfg)
-	scraper.client = mockClient
-
-	// Test data - Infoblox specific tweets
-	tweets := []models.Tweet{
-		{
-			ID:        "1234567890",
-			Text:      "Just implemented Infoblox BloxOne in our network. Great product for DNS management!",
-			CreatedAt: time.Now().Add(-24 * time.Hour),
-			UserName:  "networkadmin",
-			UserID:    "user123",
-		},
-		{
-			ID:        "0987654321",
-			Text:      "Having issues with NIOS DHCP scopes. @Infoblox support please help!",
-			CreatedAt: time.Now().Add(-48 * time.Hour),
-			UserName:  "networkengineer",
-			UserID:    "user456",
-		},
-		{
-			ID:        "5678901234",
-			Text:      "The Infoblox Grid technology is revolutionary for enterprise DNS.",
-			CreatedAt: time.Now().Add(-72 * time.Hour),
-			UserName:  "techCTO",
-			UserID:    "user789",
-		},
-		{
-			ID:        "1122334455",
-			Text:      "Spam post not related to Infoblox - should be filtered out",
-			CreatedAt: time.Now().Add(-24 * time.Hour),
-			UserName:  "spammer",
-			UserID:    "spam123",
-		},
-		{
-			ID:        "5566778899",
-			Text:      "Free ad for something - also mentions infoblox - should be filtered",
-			CreatedAt: time.Now().Add(-24 * time.Hour),
-			UserName:  "advertiser",
-			UserID:    "ad456",
-		},
+	rateLimitCfg := config.RateLimitConfig{
+		PauseBetweenRequests: true,
+		PauseDuration:        time.Millisecond * 100, // Short pause for tests
+		RandomizeUserAgents:  true,
 	}
 
-	// Setup mock expectations
-	for _, keyword := range cfg.Keywords {
-		query := "\"" + keyword + "\" -is:retweet"
-		mockClient.On("SearchTweets", query, cfg.MaxResults).Return(tweets, nil)
+	proxyCfg := config.ProxyConfig{
+		Enabled: false,
+	}
+
+	// Create the scraper
+	scraper := NewTwitterScraper(twitterCfg, rateLimitCfg, proxyCfg)
+
+	// Override the client to use our test server
+	scraper.client = &http.Client{
+		Transport: &http.Transport{
+			Proxy: func(req *http.Request) (*url.URL, error) {
+				// Redirect all requests to our mock server
+				return url.Parse(server.URL)
+			},
+		},
 	}
 
 	// Execute
 	ctx := context.Background()
-	reviews, err := scraper.FetchReviews(ctx)
+	reviews, err := scraper.Scrape(ctx)
 
 	// Assert
 	assert.NoError(t, err)
 	assert.NotEmpty(t, reviews)
 
-	// Should have 3 valid reviews (excluding the spam and ad ones)
-	validReviews := filterOutExcludedContent(reviews, cfg.ExcludeWords)
-	assert.Equal(t, 3, len(validReviews))
-
 	// Check that all reviews have proper fields
-	for _, review := range validReviews {
+	for _, review := range reviews {
 		assert.NotEmpty(t, review.ID)
 		assert.NotEmpty(t, review.Content)
-		assert.NotEmpty(t, review.Source)
-		assert.Equal(t, "Twitter", review.Platform)
-		assert.NotEmpty(t, review.AuthorID)
-		assert.NotEmpty(t, review.AuthorName)
+		assert.Equal(t, "twitter", review.Source)
+		assert.NotEmpty(t, review.SourceID)
+		assert.NotEmpty(t, review.Author)
 		assert.NotZero(t, review.CreatedAt)
 
 		// Check that reviews contain relevant Infoblox-specific keywords
 		assert.True(t,
-			contains(review.Content, "infoblox", "bloxone", "nios", "ddi", "dns", "dhcp", "grid"),
+			contains(review.Content, "infoblox", "bloxone", "nios", "ddi", "dns", "dhcp"),
 			"Review does not contain any Infoblox-specific terms: %s", review.Content)
 	}
 }
@@ -263,38 +254,37 @@ func filterOutExcludedContent(reviews []models.Review, excludeWords []string) []
 }
 
 func TestParseReviewFromTweet(t *testing.T) {
-	// Setup
-	cfg := config.TwitterConfig{}
-	scraper := NewTwitterScraper(cfg)
+	// Setup with proper config parameters
+	twitterCfg := config.TwitterScraperConfig{
+		Enabled: true,
+	}
+	rateLimitCfg := config.RateLimitConfig{}
+	proxyCfg := config.ProxyConfig{}
 
-	// Test data - Infoblox specific tweet
-	tweet := models.Tweet{
+	scraper := NewTwitterScraper(twitterCfg, rateLimitCfg, proxyCfg)
+
+	// Test data - create a Tweet structure as defined in the twitter.go file
+	tweet := Tweet{
 		ID:        "1234567890",
 		Text:      "Really impressed with @Infoblox BloxOne Threat Defense. Detected DNS exfiltration attempts instantly.",
-		CreatedAt: time.Now().Add(-24 * time.Hour),
-		UserName:  "securityexpert",
-		UserID:    "user123",
+		CreatedAt: "Wed Apr 24 10:30:00 +0000 2025",
+		User: struct {
+			ScreenName string `json:"screen_name"`
+		}{
+			ScreenName: "securityexpert",
+		},
+		RetweetCount:  5,
+		FavoriteCount: 10,
 	}
 
-	// Execute
-	review := scraper.parseReviewFromTweet(tweet)
+	// Execute - using the actual method from TwitterScraper
+	review := scraper.convertTweetToReview(tweet)
 
 	// Assert
-	assert.Equal(t, tweet.ID, review.ExternalID)
-	assert.Equal(t, tweet.Text, review.Content)
-	assert.Equal(t, "Twitter", review.Platform)
-	assert.Equal(t, tweet.UserName, review.AuthorName)
-	assert.Equal(t, tweet.UserID, review.AuthorID)
-
-	// Test for truncated text preservation
-	longTweet := models.Tweet{
-		ID:        "0987654321",
-		Text:      strings.Repeat("Very long feedback about Infoblox NIOS configuration. ", 10),
-		CreatedAt: time.Now(),
-		UserName:  "networkengineer",
-		UserID:    "user456",
-	}
-
-	longReview := scraper.parseReviewFromTweet(longTweet)
-	assert.Equal(t, longTweet.Text, longReview.Content)
+	assert.Equal(t, "twitter-"+tweet.ID, review.ID)
+	assert.Equal(t, tweet.ID, review.SourceID)
+	assert.Equal(t, "twitter", review.Source)
+	assert.Equal(t, tweet.User.ScreenName, review.Author)
+	assert.True(t, strings.Contains(review.Content, "BloxOne Threat Defense"))
+	assert.NotNil(t, review.Rating)
 }

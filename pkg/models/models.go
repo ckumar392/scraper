@@ -19,6 +19,19 @@ type Review struct {
 	Metadata    map[string]interface{} `json:"metadata"`    // Additional platform-specific data
 }
 
+// Tweet represents a tweet from Twitter/X platform
+type Tweet struct {
+	ID        string    `json:"id"`
+	Text      string    `json:"text"`
+	CreatedAt time.Time `json:"createdAt"`
+	UserName  string    `json:"userName"`
+	UserID    string    `json:"userId"`
+	URLs      []string  `json:"urls,omitempty"`
+	Hashtags  []string  `json:"hashtags,omitempty"`
+	Likes     int       `json:"likes,omitempty"`
+	Retweets  int       `json:"retweets,omitempty"`
+}
+
 // AnalysisResult represents the output of sentiment and intent analysis
 type AnalysisResult struct {
 	ReviewID       string             `json:"reviewId"`
@@ -103,6 +116,5 @@ type APIResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 	Error   string      `json:"error,omitempty"`
 }
-
 
 // --> scrape ==> classify(models) for --> notify(specifi), create tickets
