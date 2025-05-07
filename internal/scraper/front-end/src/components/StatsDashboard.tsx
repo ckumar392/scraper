@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography, Chip } from '@mui/material';
+import { Box, Typography, Chip } from '@mui/material';
+import Grid from './GridWrapper';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { ReviewStats, Platform, Department } from '../types/reviews';
@@ -172,9 +173,9 @@ const StatsDashboard: React.FC<StatsDashboardProps> = ({ stats }) => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container component="div" spacing={3}>
       {/* Summary stats */}
-      <Grid item xs={12} md={6}>
+      <Grid component="div" item xs={12} md={6}>
         <StatsCard>
           <Typography variant="h5" gutterBottom>
             Reviews Summary

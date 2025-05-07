@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Box } from '@mui/material';
+// Box is imported but not used
+// import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { colors } from '../theme/theme';
 

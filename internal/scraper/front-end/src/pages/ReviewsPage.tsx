@@ -3,8 +3,9 @@ import {
   Container, Typography, Box,  
   TextField, InputAdornment, MenuItem,
   Select, FormControl, InputLabel, SelectChangeEvent,
-  Chip, CircularProgress, Pagination, Grid
+  Chip, CircularProgress, Pagination
 } from '@mui/material';
+import Grid from '../components/GridWrapper';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { motion, AnimatePresence } from 'framer-motion';
