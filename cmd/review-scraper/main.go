@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -64,60 +66,60 @@ func main() {
 	}()
 
 	// Parse command line flags
-    apiKey := flag.String("apikey", "", "RapidAPI key (required)")
-    product := flag.String("product", "", "Product name (bloxone-ddi, infoblox-nios, or bloxone-threat-defense)")
-    rating := flag.Int("rating", 0, "Filter by star rating (0-5, 0 means all ratings)")
-    page := flag.Int("page", 1, "Page number")
-    flag.Parse()
+	apiKey := flag.String("apikey", "", "RapidAPI key (required)")
+	product := flag.String("product", "", "Product name (bloxone-ddi, infoblox-nios, or bloxone-threat-defense)")
+	rating := flag.Int("rating", 0, "Filter by star rating (0-5, 0 means all ratings)")
+	page := flag.Int("page", 1, "Page number")
+	flag.Parse()
 
-    // Validate API key
-    if *apiKey == "" {
-        apiKeyEnv := os.Getenv("RAPID_API_KEY")
-        if apiKeyEnv == "" {
-            fmt.Println("Error: API key is required. Set it with -apikey flag or RAPID_API_KEY environment variable")
-            os.Exit(1)
-        }
-        *apiKey = apiKeyEnv
-    }
+	// Validate API key
+	if *apiKey == "" {
+		apiKeyEnv := os.Getenv("RAPID_API_KEY")
+		if apiKeyEnv == "" {
+			fmt.Println("Error: API key is required. Set it with -apikey flag or RAPID_API_KEY environment variable")
+			os.Exit(1)
+		}
+		*apiKey = apiKeyEnv
+	}
 
-    // Validate product name
-    validProducts := map[string]bool{
-        "bloxone-ddi":            true,
-        "infoblox-nios":          true,
-        "bloxone-threat-defense": true,
-    }
+	// Validate product name
+	validProducts := map[string]bool{
+		"bloxone-ddi":            true,
+		"infoblox-nios":          true,
+		"bloxone-threat-defense": true,
+	}
 
-    if *product == "" {
-        fmt.Println("Error: Product name is required. Choose from: bloxone-ddi, infoblox-nios, bloxone-threat-defense")
-        os.Exit(1)
-    }
+	if *product == "" {
+		fmt.Println("Error: Product name is required. Choose from: bloxone-ddi, infoblox-nios, bloxone-threat-defense")
+		os.Exit(1)
+	}
 
-    if !validProducts[*product] {
-        fmt.Printf("Error: Invalid product name. Choose from: bloxone-ddi, infoblox-nios, bloxone-threat-defense\n")
-        os.Exit(1)
-    }
+	if !validProducts[*product] {
+		fmt.Printf("Error: Invalid product name. Choose from: bloxone-ddi, infoblox-nios, bloxone-threat-defense\n")
+		os.Exit(1)
+	}
 
-    // Create G2 client
-    client := NewG2Client(*apiKey)
+	// Create G2 client
+	client := scraper.NewG2Client(*apiKey)
 
-    // Fetch reviews
-    fmt.Printf("Fetching reviews for %s (page %d, rating %d)...\n", *product, *page, *rating)
-    reviews, err := client.FetchReviews(*product, *rating, *page)
-    if err != nil {
-        fmt.Printf("Error fetching reviews: %v\n", err)
-        os.Exit(1)
-    }
+	// Fetch reviews
+	fmt.Printf("Fetching reviews for %s (page %d, rating %d)...\n", *product, *page, *rating)
+	reviews, err := client.FetchReviews(*product, *rating, *page)
+	if err != nil {
+		fmt.Printf("Error fetching reviews: %v\n", err)
+		os.Exit(1)
+	}
 
-    fmt.Printf("Successfully fetched %d reviews\n", len(reviews))
+	fmt.Printf("Successfully fetched %d reviews\n", len(reviews))
 
-    // Save reviews to file
-    filePath, err := SaveReviewsToFile(reviews, *product)
-    if err != nil {
-        fmt.Printf("Error saving reviews: %v\n", err)
-        os.Exit(1)
-    }
+	// Save reviews to file
+	filePath, err := scraper.SaveReviewsToFile(reviews, *product)
+	if err != nil {
+		fmt.Printf("Error saving reviews: %v\n", err)
+		os.Exit(1)
+	}
 
-    fmt.Printf("Reviews saved to %s\n", filePath)
+	fmt.Printf("Reviews saved to %s\n", filePath)
 
 	// Wait for termination signal
 	sigCh := make(chan os.Signal, 1)
