@@ -1,0 +1,240 @@
+[
+  {
+    "id": 123,
+    "reviewID": 223,
+    "author": "John Doe",
+    "platform": "G2",
+    "title": "Excellent Product",
+    "Postcontent": "This is a test",
+    "replyContents": "",
+    "timestamp": "2025-04-20T15:32:00Z",
+    "tags": [
+      "test",
+      "example"
+    ],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 124,
+    "reviewID": 224,
+    "author": "Jane Smith",
+    "platform": "Trustpilot",
+    "title": "Good Experience",
+    "Postcontent": "The product works well but could use more features.",
+    "replyContents": "",
+    "timestamp": "2025-04-19T12:45:00Z",
+    "tags": [
+      "improvement",
+      "features"
+    ],
+    "rating": 4,
+    "sentiment": "Positive",
+    "department": "Product",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 125,
+    "reviewID": 225,
+    "author": "Michael Johnson",
+    "platform": "G2",
+    "title": "Great Tool",
+    "Postcontent": "We've been using this for our team and it's been a game changer.",
+    "replyContents": "",
+    "timestamp": "2025-04-18T09:22:00Z",
+    "tags": [
+      "productivity",
+      "team"
+    ],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 126,
+    "reviewID": 226,
+    "author": "Sarah Williams",
+    "platform": "App Store",
+    "title": "Needs Improvement",
+    "Postcontent": "The app crashes frequently on my device.",
+    "replyContents": "",
+    "timestamp": "2025-04-17T14:30:00Z",
+    "tags": [
+      "bug",
+      "crash"
+    ],
+    "rating": 2,
+    "sentiment": "Negative",
+    "department": "Engineering",
+    "product": "BloxOne Platform",
+    "needsAction": true
+  },
+  {
+    "id": 127,
+    "reviewID": 227,
+    "author": "David Brown",
+    "platform": "G2",
+    "title": "Solid Performance",
+    "Postcontent": "The tool has consistently performed well for our use case.",
+    "replyContents": "",
+    "timestamp": "2025-04-16T10:15:00Z",
+    "tags": [
+      "performance",
+      "reliable"
+    ],
+    "rating": 4,
+    "sentiment": "Positive",
+    "department": "Engineering",
+    "product": "BloxOne DNS",
+    "needsAction": false
+  },
+  {
+    "id": 128,
+    "reviewID": 228,
+    "author": "Emily Davis",
+    "platform": "Trustpilot",
+    "title": "Outstanding Support",
+    "Postcontent": "The customer service team went above and beyond to help us.",
+    "replyContents": "",
+    "timestamp": "2025-04-15T16:40:00Z",
+    "tags": [
+      "support",
+      "customer service"
+    ],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "Support",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 129,
+    "reviewID": 229,
+    "author": "Robert Wilson",
+    "platform": "G2",
+    "title": "Not Worth The Price",
+    "Postcontent": "Too expensive for the limited feature set it offers.",
+    "replyContents": "",
+    "timestamp": "2025-04-14T08:55:00Z",
+    "tags": [
+      "pricing",
+      "value"
+    ],
+    "rating": 2,
+    "sentiment": "Negative",
+    "department": "Sales",
+    "product": "BloxOne DNS",
+    "needsAction": true
+  },
+  {
+    "id": 130,
+    "reviewID": 230,
+    "author": "Amanda Taylor",
+    "platform": "App Store",
+    "title": "Love This Product",
+    "Postcontent": "I use it daily and can't imagine working without it.",
+    "replyContents": "",
+    "timestamp": "2025-04-13T11:20:00Z",
+    "tags": [
+      "essential",
+      "daily use"
+    ],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 131,
+    "reviewID": 231,
+    "author": "Thomas Anderson",
+    "platform": "G2",
+    "title": "Mixed Feelings",
+    "Postcontent": "Some aspects are great, others need significant work.",
+    "replyContents": "",
+    "timestamp": "2025-04-12T13:05:00Z",
+    "tags": [
+      "improvement",
+      "mixed"
+    ],
+    "rating": 3,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  },
+  {
+    "id": 132,
+    "reviewID": 232,
+    "author": "Jessica Martin",
+    "platform": "Trustpilot",
+    "title": "Impressive Analytics",
+    "Postcontent": "The data insights this tool provides have transformed our strategy.",
+    "replyContents": "",
+    "timestamp": "2025-04-11T09:30:00Z",
+    "tags": [
+      "analytics",
+      "insights"
+    ],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne DDI",
+    "needsAction": false
+  },
+  {
+    "id": 999,
+    "reviewID": 666,
+    "author": "Chandan Kumar",
+    "platform": "G2",
+    "title": "My reviews on threat defense and bloxone",
+    "Postcontent": "i was just testing the product and it was very bad and i faced multiple issues with threat defense and bloxone. I am not happy with the product and i will not recommend it to anyone. I am very disappointed with the product and i will not use it again.",
+    "replyContents": "",
+    "timestamp": "2025-04-12T13:05:00Z",
+    "tags": [],
+    "rating": 3,
+    "sentiment": "Negative",
+    "department": "Engineering",
+    "product": "BloxOne DDI",
+    "needsAction": true
+  },
+  {
+    "id": 999,
+    "reviewID": 666,
+    "author": "Chandan Kumar",
+    "platform": "G2",
+    "title": "My review on threat DNS and DHCP",
+    "Postcontent": "Good experience with DNS and DHCP i really liked the product. I am happy with the product and i will recommend it to anyone. I am very satisfied with the product and i will use it again.",
+    "replyContents": "",
+    "timestamp": "2025-04-12T13:05:00Z",
+    "tags": [],
+    "rating": 3,
+    "sentiment": "Positive",
+    "department": "Product",
+    "product": "BloxOne DDI",
+    "needsAction": false
+  },
+  {
+    "id": 1330,
+    "reviewID": 2330,
+    "author": "chandan kumar",
+    "platform": "G2",
+    "title": "Love This Product",
+    "Postcontent": "I use it daily and can't imagine working without it.",
+    "replyContents": "",
+    "timestamp": "2025-04-13T11:20:00Z",
+    "tags": [],
+    "rating": 5,
+    "sentiment": "Positive",
+    "department": "General",
+    "product": "BloxOne Platform",
+    "needsAction": false
+  }
+]
